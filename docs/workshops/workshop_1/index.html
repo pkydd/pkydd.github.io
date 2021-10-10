@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Workshop 1: Introduction to ROS Overview This workshop will introduce you to some core concepts in ROS2, show you how to track a ball with some basic computer vision (without ROS) and then finally integrate ROS into our ball tracking program as a practical way of learning how ROS works.
+You will need:
+ The computer you set up last time in workshop 0. Ideally a webcam, but we can work around that.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="Workshop 1: Introduction to ROS Overview This workshop will introduce you to some core concepts in ROS2, show you how to track a ball with some basic computer vision (without ROS) and then finally integrate ROS into our ball tracking program as a practical way of learning how ROS works.
+You will need:
+ The computer you set up last time in workshop 0. Ideally a webcam, but we can work around that." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://pkydd.co/docs/workshops/workshop_1/" />
+
+<title>Workshop 1 | I&#39;m not a robot</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e4c8e1fe6bfc4f4662537badff275e92771ed6433cdba1427042394285063721.css" integrity="sha256-5Mjh/mv8T0ZiU3ut/ydeknce1kM826FCcEI5QoUGNyE=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.67c400bb3774dca5701933cc25958d6cb8b36abf7701b347871bcec7003e7250.js" integrity="sha256-Z8QAuzd03KVwGTPMJZWNbLizar93AbNHhxvOxwA&#43;clA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.74a8bb07f0bee86d6bb9a2750f073f14d93c7e4512f28860370cfd879e9719b4.js" integrity="sha256-dKi7B/C&#43;6G1ruaJ1Dwc/FNk8fkUS8ohgNwz9h56XGbQ=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>I&#39;m not a robot</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="/"><strong>Home</strong></a></li>
+<li><strong>Robotics</strong>
+<ul>
+<li><strong>Workshops</strong>
+<ul>
+<li>
+  <a href="/docs/workshops/workshop_0/">Getting Started</a></li>
+<li>
+  <a href="/docs/workshops/workshop_1/"class=active>Intro to ROS</a></li>
+</ul>
+</li>
+<li>Interesting Papers</li>
+<li>Troubleshooting</li>
+<li>Useful Links</li>
+<li>Data sets</li>
+</ul>
+</li>
+</ul>
+<p><!-- raw HTML omitted --></p>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var menu=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Workshop 1</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#ball-tracker">Ball Tracker</a></li>
+    <li><a href="#ros-ifying-our-ball-tracker-and-running-our-first-nodes">ROS-ifying our Ball Tracker and Running our First Nodes</a></li>
+    <li><a href="#publishifying-and-subscribifying-our-ball-tracker">Publishifying and Subscribifying our Ball Tracker</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="workshop-1-introduction-to-ros">Workshop 1: Introduction to ROS</h1>
+<h2 id="overview">Overview</h2>
+<p>This workshop will introduce you to some core concepts in ROS2, show you how to track a ball with some basic computer vision (without ROS) and then finally integrate ROS into our ball tracking program as a practical way of learning how ROS works.</p>
+<p>You will need:</p>
+<ul>
+<li>The computer you set up last time in workshop 0.</li>
+<li>Ideally a webcam, but we can work around that.</li>
+</ul>
+<p>Link to repo: 
+  <a href="https://dev.azure.com/baraja/PerceptionAndTools/_git/robo_workshops">robo workshops</a></p>
+<p><strong>Time to complete : ~1-1.5 Hours</strong></p>
+<!-- raw HTML omitted -->
+<h1 id="ros-and-ros2">ROS and ROS2</h1>
+<p>ROS (Robotic Operating System) is a collection of open source libraries, build systems, tools, drivers and other algorithmic packages that provide a structure for building robotics projects. (ROS and ROS2 are very similar, ROS2 just uses different technology in its network stack - we&rsquo;ll talk about the differences later as they are conceptually very similar). At its core, ROS (and ROS2) is a communication framework that allows the transfer of data, control, state and all sorts of other complex information in a way that is flexible and abstracted. It can provide a structure for projects as simple as a blinking light on a micro-controller to complex industrial applications and autonomous vehicles.</p>
+<p>To understand how ROS works, lets think about how we might like to build a small wheeled robot:</p>
+<p>
+  <img src="/assets/ws_1/hypothetical_rover.png#center" alt="" /></p>
+<p>On board we have a lidar, camera, IMU (Inertial Measurement Unit - we&rsquo;ll get to those in a few episodes), some motor drivers and a computer to process the data, control the motors etc. How would the software architecture for such a system look? Well, we could definitely just have a big loop that spins, reading data from our sensors and processing it, something like this:</p>
+<p>
+  <img src="/assets/ws_1/control_loop.png#center" alt="" /></p>
+<p>An approach like this however does have some drawbacks:</p>
+<ul>
+<li>
+<p>Serial Execution: We execute everything serially (one after the other) only making progress once an operation has finished. For example, our IMU might be producing data at a very fast rate ( &gt;100Hz), whereas we might have a very slow camera, which operates at 10Hz or less. This means that while we are waiting on the camera data, we will be missing out on new data from the other sensors in the system (lidar, IMU, etc). On top of that, we still need to process that camera data (as well as the lidar data etc!) By the time we get to the calculate_path function call, our IMU data might be very out of date, significantly reducing its usefulness.</p>
+</li>
+<li>
+<p>Robustness (or lack thereof): Imagine if we are driving along and all of a sudden our get_lidar_data function throws an exception. How do we restart the lidar module and recover? More importantly, how can we ensure that our system is still under control? We need a way to prevent a single point of failure from knocking out the entire system (often catastrophically, especially when vehicles or other large masses are involved). Making sure that the rest of the system can respond to a failure is critical.</p>
+</li>
+<li>
+<p>Tight Coupling: That is, some parts that are otherwise unrelated or distantly related become dependant on the specific implementation of other parts of the system. Then, changing one part of the system would necessitate changing other parts of the system.  Imagine our calculate path function requires a particular format of data from our camera and lidar - what happens when we need to change our lidar to a different model, brand ? (the Baraja packet structure is very different to the Velodyne packet structure and would require effort to change)</p>
+</li>
+<li>
+<p>(and more)</p>
+</li>
+</ul>
+<p>What we would really like to do is decentralise our system&rsquo;s architecture. This means that instead of having one large monolithic program like the one above, we break our system down into smaller modules, with clearly defined roles, interfaces and abstract implementations.</p>
+<p>This is where ROS comes in. If we were to implement the above system in ROS, it would look something a little more like this:</p>
+<p>
+  <img src="/assets/ws_1/node_graph_0.png#center" alt="" /></p>
+<p>Each of the coloured rectangles in the above network (called a graph) represents one computational module, called a node. They can produce or consume data, or both (or neither, although this isnt common). We call the data messages (kind of like a network packet) and the name of that message stream a topic. Messages are of a pre-defined type (and you can define your own). Nodes that listen for these topics are considered to be subscribers of that topic and nodes that produce data on these topics are considered to be publishers.  Whew,  ok, that was a lot to take in. Lets examine the IMU path in the above graph as an example.</p>
+<p>
+  <img src="/assets/ws_1/node_closeup_0.png#center" alt="" /></p>
+<p>Starting at the left, we can see the IMU hardware and the node that manages it. This node provides the low level interfacing with the IMU device via whatever hardware interface is required and collects the raw data that it produces. It then packages that raw data up in a standard ROS message type (sensor_msgs/IMU) and publishes it on the topic &ldquo;imu_data&rdquo;.  One of the fantastic things about the pub/sub model is that when a topic is published to, all subscribed nodes immediately receive it.   </p>
+<p>The next node is the Pose Estimation node.  It is a subscriber to the imu_data topic. Whenever it receives an IMU message it will use that data to calculate the pose estimation of the robot, which it then packages up into a standard message format of the type geometry_msgs/Pose and publishes it on the &ldquo;imu_pose&rdquo; topic. </p>
+<p>Finally, on the right, our Navigation node is subscribed to the &ldquo;imu_pose&rdquo; topic, which it then uses with data from other topics from the lidar, camera and whatever else, which it then turns into control signals for the motor driver (which would also be a node in our system - it is nodes all the way down).</p>
+<p>This approach may look a lot more complicated at first glance, but it conveys significant advantage over the monolithic approach that we considered above. Lets take a look at our list of drawbacks with the monolithic design: </p>
+<ul>
+<li>
+<p>Serial execution: Since our system is decentralised, each node is processing separately and asynchronously with respect to every other node in the system. What that means is that these nodes are all effectively running &ldquo;at the same time&rdquo;* and so there is no risk of one node delaying other nodes from doing work. </p>
+</li>
+<li>
+<p>System robustness: Since our system is decentralised, we have significantly reduced the risk of a single point of failure from knocking out the entire system**. In this revised model, if a node fails and cannot recover, we can detect that, attempt to restart the node and in the worst case scenario, the navigation node would detect that the lidar node is not publishing data and cease operation, making our system far more robust to failure and far safer. </p>
+</li>
+<li>
+<p>Coupling is no longer a significant issue - since our code is now both logically and implementationally separated into modules, there is far less risk that one node could depend on the specifics of another. Additionally, since we are now communicating with topics and standard message types, we can replace any node with another, as long as it conforms to the same standard (produces the same message type). Say we replace the Velodyne lidar on our system with a Baraja lidar, the only change we would need to make is to replace the lidar node itself, as everything downstream would just be expecting the standard point cloud message type. </p>
+</li>
+</ul>
+<p>*: as much as any processes running on the same machine are running &ldquo;at the same time&rdquo;. There is some detail here, but we will gloss voer it for now (boy, I sure do do that a lot dont I&hellip;)
+**: There are still failure modes for any robotic system that can be catastrophic (general power failure, failure of main control threads etc.) It is up to the designers to make sure the system is going to &ldquo;fail safe&rdquo;.    </p>
+<p>Hopefully we can see how this graph and node structure and publisher/subscriber model is super useful. ROS offers a significant number of other advantages as well, but I think we have had enough theory for now.    </p>
+<hr>
+<blockquote class="book-hint info">
+  <p><strong>ELI5</strong>: Abstraction and coupling</p>
+<p><strong>Abstraction:</strong> In computer science, the concept of abstraction (abstract data types, abstract interfaces) describes a system where the details of its implementation are hidden from the outside. Instead, the system will expose a carefully designed interface, which provides the functionality, but protects the hidden implementation. There are many significant advantages to this design approach:</p>
+<p>If the implementation details are hidden, then they cannot change the way the user interacts with the system. Therefore, they can also be changed without impacting the users interaction experience. As a designer, you could update the inner workings of the system to make it faster or more efficient, fix bugs etc. and the user would never need to know.</p>
+<p>If the user cannot access the implementation, the user is also unable to break it (more). Protecting the implementation from outside interference is a critical part of abstraction (like say, a customer being able to see how an ATM worked).</p>
+<p>If the abstract interface provided is common enough (or specified by some governing body, like say JEDEC, ISO etc), then swapping out one implementation for another is trivially simple.
+As an example, consider the humble USB stick. How do they work? No-body knows. You just plug it into your USB port and your computer recognises it (ideally) and off you go. As a user, you have no opportunity to break the system, since it is all hidden away from you. If the company that makes the USBs finds an even more efficient way to make them, or make them faster or larger or whatever, you as the user don&rsquo;t need to know about it. You just plug it in and off you go - no manual intervention required, even if the underlying design is completely different (say they change from flash memory to anther type of storage). Finally, if your USB stick stops working, it doesn&rsquo;t matter! Just grab another one and it is guaranteed to work in all your existing USB ports.</p>
+<p><strong>Coupling:</strong> Coupling is almost the complete opposite of abstraction. Instead of clean abstract interfaces defining the interaction of different modules, a highly (or tightly) coupled system will be all disgustingly intermingled, with all sorts of way-too-close for comfort interaction going on. More formally, the higher the coupling of a system, the higher the dependence between its modules. Typically highly-coupled systems are harder to maintain and modify, since a change in one part of the system would necessitate changes in other parts (and in areas that may not necessarily be clear to the engineer), as a result of difficult maintenance and modificability(?), highly coupled systems are far likelier to contain bugs an errors.</p>
+<p>Coupling may not necessarily be a bad thing however - loosely coupled systems tend to be easier to maintain, but data flow and coordination can be trickier or less efficient. Like most things, there is a compromise to be found and it is up to the designer to use their best judgement.</p>
+
+</blockquote>
+
+<hr>
+<h2 id="ball-tracker">Ball Tracker</h2>
+<p>Ok, thats enough theory for now, lets take a break from ROS and do something interesting! We will write a simple Python program that uses some computer vision basics to track a red ball in an image or video stream.  We won&rsquo;t be using any ROS in this program&hellip; for now.</p>
+<p>The code for this is exercise is available at the repo link in the overview at the top of the page. If you want to jump ahead, you can run the program like so:</p>
+<pre><code># change directory into the folder containing our program
+cd robo_workshops/workshop_1/ball_tracker 
+
+# change the permissions of the python file to executable (means we can run the file directly)
+chmod 755 ball_tracker.py 
+
+# run the program, passing in an image path as an argument 
+./ball_tracker.py --img_path data/ball_0.png
+
+# Alternately, run the program with no argument to use input from a camera:
+./ball_tracker.py
+</code></pre>
+<p>Before we begin, lets get our Linux machine ready for our ball tracker by installing some needed packages:</p>
+<pre><code>sudo apt install python3-pip v4l-utils 
+</code></pre>
+<p>Then to install some required python packages (these are also listed in the requirements.txt file in the repo):</p>
+<pre><code>pip install opencv-python imutils
+</code></pre>
+<p>Ok, so lets get started. I have this red ball on my desk, but its always rolling around and getting in the way. Lets write a program that lets us track where it is to make sure we can keep it out of trouble.</p>
+<p>We&rsquo;ll set up our program to either take in a path to an image file, or (the default) use a camera stream as its image source. We will then take a frame from our camera stream (or our image file), apply some processing to it and then display the result on screen. Lets take a look at our main function:</p>
+<p>
+  <img src="/assets/ws_1/code_0.png" alt="" /></p>
+<p>&hellip;</p>
+<p>
+  <img src="/assets/ws_1/code_1.png" alt="" /></p>
+<p>Ok, so we have some boilerplate for argument parsing, and then our main function. If we haven&rsquo;t been provided an image file path by the user (line 28), we open a video stream object on our camera device. OpenCV allows you to specify a video device index, which roughly corresponds to your video device enumeration in /dev. By default we will use device 0, the first device, but we allow the user to specify with
+the video_device argument.</p>
+<p>If we are using the webcam, we then attempt to read from it (which is the most elegant way I could find) to make sure the device is working as expected. If not, we report the error to the user and exit the program.</p>
+<p>Next, we have our main loop - if we have been provided an image path by the user, we read that path to obtain our frame, otherwise, we read a frame from the camera. Either way, we now have a matrix representing the image data, where the first two dimensions are the same dimensions as the resolution of the camera/image, and the last dimension stores the colour information of the corresponding pixel (in BGR format, which is the openCV default).</p>
+<p>Actually, while we are here, lets take a bit of a look at how image data is stored in a matrix. It&rsquo;s mostly pretty intuitive:</p>
+<p>
+  <img src="/assets/ws_1/img_matrix_0.png#center" alt="" /></p>
+<p>You can imagine the image to be a large grid, where the horizontal axis is the x axis, and the vertical axis is the y axis, then the top left is position x = 0, y= 0 or (0, 0) and the bottom right is (i, j) where i is the maximum width of the image and j is the maximum height of the image. You can see in the above image how as we zoom closer in to the image, these individual grid squares become more and more apparent. We call these &ldquo;pixels&rdquo; and each one is represented by three numbers 9for colour images, otherwise it is just one), each with a value from 0 to 255 and corresponding to blue, green or red. These colours, when blended, allow us to represent any colours in the spectrum, which is super neat.</p>
+<p>Side note, if you look at your phone screen under a microscope, you may be able to see the blue green and red pixels, which when viewed far enough away, combine to have the same effect.</p>
+<p>Ok, so the computationally oriented among you might be thinking &ldquo;0-255&hellip; thats one byte!&rdquo; and that is correct - one pixel can be stored as one byte for monochromatic images (single hue images) and three bytes for colour images. Therefore, a colour image that is uncompressed requires at least i* j * 1 bytes  for monochromatic images, or i * j * 3 for colour images bytes to be stored. (typically though the image is compressed which reduces the size, and will have some sort of metadata header, which slightly increases size.</p>
+<p>Anyway, lets get back to the ball. Here is the culprit:</p>
+<p>
+  <img src="/assets/ws_1/ball_0.png#center" alt="" /></p>
+<p>We want to be able to extract its location in the image frame. If we look back at our main function, there is a call to a function called process_frame. This function does all of the image processing for our program. The plan will be the following:</p>
+<ol>
+<li>Pre-process our frame, apply a slight blur and covert it to the HSV colour space</li>
+<li>Generate a binary mask of the red regions of the image (to track our red ball)</li>
+<li>Select the most appropriate contours from our mask</li>
+<li>Use these contours to select the ball and mark it</li>
+</ol>
+<p>Lets take a look at the process_frame function:
+
+  <img src="/assets/ws_1/code_2.png" alt="" /></p>
+<p>The first thing we do is prepare the image. Here we apply a Gaussian blur, which is a form of low-pass filter. By applying a blur like this, we are reducing noise and detail (high frequency information) in our image which might make our colour based detection less effective. We don&rsquo;t want to reduce our detail too much, so we keep the blurring to a minimum. Here is our blurred ball:</p>
+<p>
+  <img src="/assets/ws_1/ball_blurred_0.png#center" alt="" /></p>
+<p>Next, we will convert the image into the HSV colour model. HSV (Hue, Saturation, Value) is a model that represents colours differently from the RGB model. RGB allows the combination of red, green and blue values to represent any colour in the spectrum. In HSV, we instead represent the hue, saturation and value of an image. The advantage of this approach is that we can separate the intensity and colour information. In computer vision applications, this translates to greater robustness to changing lighting conditions.</p>
+<p>For example, a red object will always be red in the HSV colour model, but with varying saturation and value &hellip; values. You can see this in the cylindrical representation of the HSV model below. Notice that colours are represented as an &ldquo;angle&rdquo; on the face of the cylinder, with 0 degrees being in the lower red range, and 359 being in the higher red range (0 degrees is the red primary, 120 degrees is the green primary and 240 degrees is the blue primary).</p>
+<p>
+  <img src="/assets/ws_1/hsv.png#center" alt="" /></p>
+<p>Converting our image matrix into the HSV colour model gives us this:</p>
+<p>
+  <img src="/assets/ws_1/ball_hsv_0.png#center" alt="" /></p>
+<p>Quite a bit different!</p>
+<p>We have now completed our image pre-processing. Lets create a binary mask of the red regions of the image. A binary mask is basically just a matrix where the value in the element is either 1 if teh element belongs to the set, or 0 if it doesn&rsquo;t. We will be using HSV values as our bounds for creating the mask. All we are really doing is looking at whether or not each pixel in the image is red &ldquo;enough&rdquo; by determining if it is inside of some threshholds that I have calculated beforehand.</p>
+<p>
+  <img src="/assets/ws_1/code_bounds_0.png" alt="" /></p>
+<p>&hellip;
+
+  <img src="/assets/ws_1/code_generate_mask.png" alt="" /></p>
+<p>In the top picture, I have created some mask bounds (in HSV) for red. Remember how I mentioned that in HSV, the red primary sits around 0 degrees? well, if we want to capture red reliably, we will need two masks which will cover the red region from H values 0 through 15, and the red region from about 165 through 179. (In openCV, H values in HSV are between 0 and 179 and S and V values are between 0 and 255).  We will then add these two masks together to get a full red mask. Here&rsquo;s what that mask looks like:</p>
+<p>
+  <img src="/assets/ws_1/ball_mask.png#center" alt="" /></p>
+<p>We pick up the ball as well as the red keycap on the keyboard in the background.  So far so good. Our mask is looking pretty good, but lets go ahead and apply some morphological operations to it. These are a type of non-linear filter, where a pixel is changed based on the characteristics of the neighbouring pixels.</p>
+<p>It helps to think about our mask as a binary matrix, where the black regions are 0&rsquo;s and the white regions are 1&rsquo;s, and when we apply a morphological operation to our image we are actually convolving a smaller kernel against our matrix. This smaller kernel is called the &ldquo;structuring element&rdquo; and can have different properties depending on what the intended use is.</p>
+<p>
+  <img src="/assets/ws_1/binary_matrix.png#center" alt="" /></p>
+<p>Think of convolution as simply sliding our structuring element (kernel) over the larger image, 9 squares at a time and applying some operation. In the case of these morph. operations, we are comparing the underlying pixel values with our kernel. If we have all pixel values under the kernel matching, it is called a &ldquo;fit&rdquo;, otherwise, if they do no match, it is called a &ldquo;hit&rdquo;. This will make more sense in a second.</p>
+<p>Practically, erosion and dilation are operations that are usually combined to achieve a specific effect. Applying erosion and then dilation is called &ldquo;opening&rdquo; and would help with things like noise or filling in any spotty areas in our ball region that might result from poor thresholding. Lets see how it works:</p>
+<p>Erosion is kind of what it sounds like - we take an image and run our operation over it and any areas that are non-zero will &ldquo;thin&rdquo;. This works by applying our structuring element to our image, and any &ldquo;fit&rdquo; for pixel p will result in p being set to 1, otherwise, it will set p to 0. We are basically saying, if we detect even a single 0 anywhere in our little 9 square grid, i am setting the middle pixel to 0. Depending on our structuring element size and shape, we could potentially remove quite a lot of detail from our mask.</p>
+<p>This can be really useful for getting rid of noise or otherwise reducing small details:</p>
+<p>
+  <img src="/assets/ws_1/erosion.png#center" alt="" /></p>
+<p>Notice in this image that the small noisy points disappear, but our character also shrinks in size.</p>
+<p>Next we have dilation, which is more or less the opposite of erosion. When we run our operation on our image, any non-zero areas will &ldquo;thicken&rdquo;. As we run our structuring element over our image matrix, for any pixel p, any &ldquo;hit&rdquo; on its neighbours will result in p being set to 1, otherwise it is set to 0. So we are basically saying, if we detect any pixel in our 9 square grid that is a 1, set the middle pixel to 1 as well.</p>
+<p>This can be great for filling up regions that have inclusions or otherwise increasing the size of smaller details:</p>
+<p>
+  <img src="/assets/ws_1/dilation.png#center" alt="" /></p>
+<p>Notice that the small inclusions in the character disappear, but the character has also gotten thicker.</p>
+<p>So this is great for getting rid of small noise particles, but it does change our underlying data (which may or may not be important). So we can actually combine these two operations (erode -&gt; dialate) and perform what we call &ldquo;opening&rdquo; the image.</p>
+<p>Our mask was already pretty good, so the effect isn&rsquo;t very dramatic:</p>
+<p>
+  <img src="/assets/ws_1/ball_mask_morphology.png#center" alt="" /></p>
+<p>Eroded on the left, dilated on the right. We can see that we did introduce a small inclusion in our erosion, and that the dilation shrinks it again. We could play with our morphological parameters to get different results if we needed to.</p>
+<p>Our mask is looking pretty good now! Lets go ahead and extract the ball location from it. We can do this by extracting all of the contours from the image (luckily openCV can do this for us):</p>
+<p>
+  <img src="/assets/ws_1/code_get_contours.png" alt="" /></p>
+<p>Contour detection and extraction is actually super interesting (but a little out of the scope of this workshop). The implementation that openCV uses is based on a paper that is unfortunately behind a paywall: Topological structural analysis of digitized binary images by border following - Satoshi Suzuki, Keiichi Abe (written back in 1985!!)</p>
+<p>We can now finally extract the probable ball location from our contour list:</p>
+<p>
+  <img src="/assets/ws_1/code_get_outline.png" alt="" /></p>
+<p>There are a few things going on here, lets break it down:
+First we check to make sure that we actually found a contour in our image (based on the mask above, I would expect two contours. 
+We want to select the contour with the largest area (although, this may not be the best approach &hellip;) and then find the circle that encloses it. The choice of circle is more or less arbitrary, it could be a bounding box or whatever else we want.</p>
+<p>We then calculate the moments of the contour and calculate the center moment. A moment is kind of like a moment from physics - pixels in an image are weighted by their intensity. This allows us to find center of &ldquo;mass&rdquo; and other things that are useful for describing objects in an image. We don&rsquo;t need to worry about this too much at the moment though. The raw/image moments page on Wikipedia has a good overview.</p>
+<p>Our function returns the x, y, and radius of our ball, as well as its center (if it is large enough). We then jump back to our process image function to draw our enclosing circle:</p>
+<p>
+  <img src="/assets/ws_1/code_get_outline_1.png" alt="" /></p>
+<p>And there we have it, we have detected a ball:</p>
+<p>
+  <img src="/assets/ws_1/ball_detected.png#center" alt="" /></p>
+<p>Remember, you can run the program like so:
+# change directory into the folder containing our program
+cd robo_workshops/workshop_1/ball_tracker</p>
+<pre><code># change the permissions of the python file to executable (means we can run the file directly)
+chmod 755 ball_tracker.py 
+
+# run the program, passing in an image path as an argument 
+./ball_tracker.py --img_path data/ball_0.png
+
+# Alternately, run the program with no argument to use input from a camera:
+./ball_tracker.py
+</code></pre>
+<hr>
+<h2 id="ros-ifying-our-ball-tracker-and-running-our-first-nodes">ROS-ifying our Ball Tracker and Running our First Nodes</h2>
+<p>Ok, so the last thing we will look at in this workshop is applying some of the things that we learned about ROS2 to our little ball tracker program.</p>
+<p>Before we begin, lets install some necessary packages:</p>
+<pre><code>sudo apt install ros-galactic-usb-cam ros-galactic-rqt*
+</code></pre>
+<p>Ok, so to recap the last section, we created a small python program that would track a red ball - we read frames directly from our camera, processed them to identify the ball, and then viewed them until the user quit the program. Now we are going to change that structure up a bit, to see how ROS works and how easy it is to use.</p>
+<p>First, lets spin up our ROS linux machine, plug in a USB camera and try a few things out.  Open up a terminal and run:</p>
+<pre><code>ros2 run rviz2 rviz2
+</code></pre>
+<p>Note: if you get an error here about the system not knowing what ros2 is, make sure you have added the line</p>
+<pre><code>&quot;source /opt/ros/galactic/setup.bash&quot;
+</code></pre>
+<p>(without quotes) to the end of your .bashrc file in your home directory (<strong>/home/&lt;username&gt;/.bashrc</strong>). It was one of the last things we did in the last workshop, but it is easy to forget.</p>
+<p>In the line that we ran above, &ldquo;ros2 run&rdquo; allows us to run applications that exist in the ROS2 environment. &ldquo;rviz2&rdquo; (the first one) is the package name space for rviz, the ROS Visualiser. The last &ldquo;rviz2&rdquo; is the name of the app. Its a bit confusing, but what are you going to do about it?</p>
+<p>If we run the above line, we should see something like this pop up, which might be a little familiar:</p>
+<p>
+  <img src="/assets/ws_1/rviz.png#center" alt="" /></p>
+<p>This is the Rviz interface, where we can visualise data that we have subscribed to. It is also a node, which we will see in a moment. Lets get some data going. In a different terminal run the following:</p>
+<p>ros2 run usb_cam usb_cam_node_exe</p>
+<p>This line is pretty similar to the rviz line above, except we are using a different package - the usb_cam package we installed just before. We are also running the ridiculously named &ldquo;usb_cam_node_exe&rdquo; binary. If all goes well, your terminal should spit out something like the following:</p>
+<p>
+  <img src="/assets/ws_1/camera_node_output.png#center" alt="" /></p>
+<p>Ignore the error, it just means that we haven&rsquo;t set up a calibration file for this camera. If you get any other errors, like this one:</p>
+<p>
+  <img src="/assets/ws_1/camera_node_error.png#center" alt="" /></p>
+<p>&hellip; just make sure your camera is plugged in and the virtual machine (if you are using one) has access to the camera. You can try unplugging and plugging it back in to correct this.</p>
+<p>Ok, aside from that, nothing has happened, but we have just started another node, the usb_cam node. Lets have a look at the data in rviz:</p>
+<p>In the bottom left of the rviz window, you should see an &ldquo;Add&rdquo; button. Click this and then click the topics tab in the window that pops up and finally double click on the &ldquo;Image&rdquo; option.</p>
+<p>
+  <img src="/assets/ws_1/rviz_add_image.png#center" alt="" /></p>
+<p>If all goes well, you should see this somewhere in the bottom left:</p>
+<p>
+  <img src="/assets/ws_1/rviz_no_image.png#center" alt="" /></p>
+<p>Ok, one last thing, lets make sure that our frame of reference in the visualiser is correct. To do this, we need to see what the camera&rsquo;s frame of reference is - in a terminal, run the following:</p>
+<pre><code>ros2 node list
+</code></pre>
+<p>
+  <img src="/assets/ws_1/node_list.png#center" alt="" /></p>
+<p>Note that we can see our rviz and usb_cam nodes - great!</p>
+<p>Lets have a look at the topics we are currently publishing, while we are at it:</p>
+<pre><code>ros2 topic list
+</code></pre>
+<p>
+  <img src="/assets/ws_1/topic_list.png#center" alt="" /></p>
+<p>ok, lets take a closer look at our usb_cam node now:</p>
+<pre><code>ros2 node info /usb_cam
+</code></pre>
+<p>
+  <img src="/assets/ws_1/usb_cam_info.png#center" alt="" /></p>
+<p>In the above, we can see the subscriptions and published topics of our node, as well as a bunch of other stuff. Ignore that for now.</p>
+<p>finally, lets have a look at the start of one of our /image_raw topic:</p>
+<pre><code>ros2 topic echo /image_raw | head -n 20
+</code></pre>
+<p>This line will echo the topic /image_raw and then &ldquo;pipe&rdquo; it into a linux tool called &ldquo;head&rdquo;, which allows us to output the first n (default 10) lines of a file. We should see:</p>
+<p>
+  <img src="/assets/ws_1/rostopic_echo.png#center" alt="" /></p>
+<p>Here we can see our message header, which contains metadata like the timestamp (epoch time), the size of the image (640x480 pixels in this case) the colour encoding, etc. We are interested in the frame_id, since we will need to set this in rviz. Because we have not set it, it is just &ldquo;default_cam&rdquo;.</p>
+<p>I will go into frames of reference and transforms in a future workshop, but I don&rsquo;t want to overwhelm you!</p>
+<p>Lets go back to rviz and set our Fixed Frame - click on the fixed frame field that will say something like &ldquo;map&rdquo; and type in &ldquo;default_cam&rdquo;:</p>
+<p>
+  <img src="/assets/ws_1/rviz_frame.png#center" alt="" /></p>
+<p>And viola! We should now see camera data coming through in our rviz image window in the bottom left:
+
+  <img src="/assets/ws_1/rviz_with_cam.png#center" alt="" /></p>
+<p>We should see camera output in the bottom left, although it may be a bit laggy if you are running on a virtual machine. Great stuff!</p>
+<p>One last thing before we move onto the python, lets take a look at the node graph that we have created:</p>
+<pre><code>rqt_graph
+</code></pre>
+<p>You should see something like this pop up: </p>
+<p>
+  <img src="/assets/ws_1/ball_tracker_rosgraph.png#center" alt="" /></p>
+<p>This is great - this is our node graph. We can see on the left we have a node called &ldquo;/usb_cam&rdquo; (in blue) publishing a topic called &ldquo;/image_raw&rdquo; ()in red) and on the right, we can see rviz (in green) subscribing to it (which is what we set up when we clicked the &ldquo;Add&rdquo; button). Fantastic!</p>
+<hr>
+<h2 id="publishifying-and-subscribifying-our-ball-tracker">Publishifying and Subscribifying our Ball Tracker</h2>
+<p>Ok, sorry about that tangent. Lets get back to business.</p>
+<p>Remember how at the beginning of this workshop (bet it feels like hours ago now) I showed you that monolithic program structure for our robot, where we just had a big loop, grabbed some data, processed it and then did something with it? Well, that kind of looks like the way that I have written the python program. Lets have a look at how we can make it a little more ROS compatible.</p>
+<p>Here is the basic overview of our system currently: 
+
+  <img src="/assets/ws_1/ball_detect_control_loop.png#center" alt="" /></p>
+<p>We really want to turn it into something more like this:
+
+  <img src="/assets/ws_1/ball_tracker_node_graph.png#center" alt="" /></p>
+<p>Its not really that hard - we are simply going to create a node called &ldquo;ball_tracker&rdquo; which will subscribe to the image topic produced by the /usb_cam node and publish its own topic with the circled ball image. Lets do it!</p>
+<p>Lets begin by creating a workspace: 
+(As always, this is included in the repo code, but it would be good for you to practice creating a workspace anyway)</p>
+<pre><code>cd &lt;location of where you want to work&gt;
+mkdir -p ball_tracker_ws/src
+cd ball_tracker_ws/src
+ros2 pkg create --build-type ament_python py_ball_tracker
+</code></pre>
+<p>Note - you might get a message about rosdep not being installed, if that is the case, run:</p>
+<pre><code>sudo apt install python3-rosdep
+sudo rosdep init
+rosdep update
+</code></pre>
+<p>Now you should have a workspace and a package called py_ball_tracker set up.
+We are going to go into the 
+<!-- raw HTML omitted -->/ball_detect_ws/src/py_ball_tracker/py_ball_tracker/ directory and create a file called BallTracker.py</p>
+<p>Before we dive into the code, lets talk about how this is going to work. Remember that we want to be able to respond to any message that we are subscribed to as soon as it comes in. Rather than have a large polling loop (which is what the monolithic design was doing), we will use something called a &ldquo;callback&rdquo; function. This is just a software nerd way of saying &ldquo;a function that gets called when something specific happens&rdquo;.</p>
+<p>What we will do is create a callback function that will respond to any image messages that we receive. This callback function will do some work on the image (which we have already set up in our ball_tracker python program) and then publish the new image to a different topic. We will then subscribe to that topic in rviz and view it.</p>
+<p>Ok, lets do it. We will be writing this node as a python class. If that sentence doesn&rsquo;t mean anything to you, then don&rsquo;t stress. I have a 17 part lecture series on how to write a python class&hellip; :P</p>
+<p>For the most part, I have left the code in its original format - we will be using the same functions, just incorporated into a class. We can focus then on the interface. Lets take a look at our program now:</p>
+<p>First, lets look at our class structure:
+
+  <img src="/assets/ws_1/code_topic_names.png" alt="" /></p>
+<p>&hellip;
+
+  <img src="/assets/ws_1/code_ball_tracker_class.png" alt="" /></p>
+<p>We have created a class called &ldquo;BallTracker&rdquo;, which inherits from the Node object (this is a ROS Node object, providing a bunch of functionality like subscribe and publish).</p>
+<p>We have also added some basic objects:</p>
+<ul>
+<li><strong>self.image_subscription</strong>: a subscriber object, which will listen on the <strong>/image_raw</strong> topic
+<ul>
+<li>Notice that we have given the image_subscription object a reference to something called <strong>self.process_image_callback</strong> - this is our callback function that will be called every time an image message is received on the <strong>/image_raw</strong> topic.</li>
+</ul>
+</li>
+<li><strong>self.image_publisher</strong>: a publisher topic which will publish to the <strong>/ball_detect_out</strong> topic</li>
+<li>self.cv_bridge: a bridging function that allows us easy conversion between ROS and OpenCV objects.</li>
+</ul>
+<p>Ok, so that is the class stuff out of the way, lets take a look at the callback function:
+
+  <img src="/assets/ws_1/code_ball_tracker_callback.png" alt="" /></p>
+<p>When an image message is received on the topic specified at subscriber creation (&quot;<strong>/image_raw</strong>&quot;) this function will be called with the message passed in as an argument (&quot;<strong>in_msg</strong>&quot;).</p>
+<p>On line 51 we convert it from an image message to  an image matrix (that we have seen before in our other implementation).  On line 55, we are simply calling our process frame function to process the frame and return the resultant frame.  Lines 59-60 show us creating an image message object and setting its &ldquo;frame_id&rdquo; value to match that of our usb_cam node. Finally, line 63 shows us publishing the message.</p>
+<p>To make it super clear how this related back to our non-ROS ball tracker, lets look at the functions side-by-side (figuratively):
+
+  <img src="/assets/ws_1/code_ball_tracker_loop.png#center" alt="" /></p>
+<p>Equivalent sections have been numbered accordingly (1 == 1, 2== 2 etc).  Look at that, they are basically identical! See, ROS isn&rsquo;t so scary. Lets check RVIZ to make sure we are able to visualise our data:</p>
+<p>
+  <img src="/assets/ws_1/rviz_side_by_side.png#center" alt="" /></p>
+<p>Perfect! We can see that we are publishing an image stream on the topic that we created, with the ball circled!</p>
+<p>Lets double check that ROS graph situation:
+
+  <img src="/assets/ws_1/ball_tracker_rosgraph.png#center" alt="" /></p>
+<p>This is exactly what we wanted: we have a node that publishes a camera image (/usb_cam) to a topic (&quot;/image_raw&rdquo;), another node that subscribes to that topic, processes it (&quot;/ball_tracker&rdquo;) and publishes it to another topic (&quot;/ball_detect_out&rdquo;) and finally another node (&ldquo;rviz&rdquo;) that visualises it (but this could be any consumer node).</p>
+<p>Ok, so if you clone the project (get the link at the overview section at the veeeeery top of the page) you will need to build the workspace:</p>
+<pre><code>cd &lt;repo&gt;/workshop_1/ball_detect_ws
+
+#build our project - this may take a moment
+colcon build --packages-select py_ball_tracker
+
+# source our local workspace envioronment set up
+source install/setup.bash
+</code></pre>
+<p>If you get an error that your system doesn&rsquo;t know what colcon is, install it like so:</p>
+<pre><code>sudo apt install python3-colcon-common-extensions 
+</code></pre>
+<p>Then to run everything, try the following:</p>
+<pre><code>ros2 run rviz2 rviz2
+ros2 run usb_cam usb_cam_node_exe
+</code></pre>
+<p>&hellip; and then finally run our new node:</p>
+<pre><code>ros2 run py_ball_tracker ball_tracker
+</code></pre>
+<p>Ok, have fun! I recommend having a play around with the computer vision stuff - try and figure out how you can break the ball tracking (it wont be hard) and then think about how you might be able to improve it.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function select(element){const selection=window.getSelection();const range=document.createRange();range.selectNodeContents(element);selection.removeAllRanges();selection.addRange(range);}
+document.querySelectorAll("pre code").forEach(code=>{code.addEventListener("click",function(event){select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText(code.parentElement.textContent);}});});})();</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#ball-tracker">Ball Tracker</a></li>
+    <li><a href="#ros-ifying-our-ball-tracker-and-running-our-first-nodes">ROS-ifying our Ball Tracker and Running our First Nodes</a></li>
+    <li><a href="#publishifying-and-subscribifying-our-ball-tracker">Publishifying and Subscribifying our Ball Tracker</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

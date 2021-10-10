@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Workshop 0: Getting started Overview: This workshop is designed to help you set up a machine with Linux and ROS2 in preparation for the following workshops.
+You will need: To complete the initial workshops, you will really only need a PC and a little bit of space (~40GB should be enough).
+The following sections will help guide you through the set up process for both Linux and ROS2. Time to complete: &lt; 1 Hour">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="Workshop 0: Getting started Overview: This workshop is designed to help you set up a machine with Linux and ROS2 in preparation for the following workshops.
+You will need: To complete the initial workshops, you will really only need a PC and a little bit of space (~40GB should be enough).
+The following sections will help guide you through the set up process for both Linux and ROS2. Time to complete: &lt; 1 Hour" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://pkydd.co/docs/workshops/workshop_0/" />
+
+<title>Workshop 0 | I&#39;m not a robot</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e4c8e1fe6bfc4f4662537badff275e92771ed6433cdba1427042394285063721.css" integrity="sha256-5Mjh/mv8T0ZiU3ut/ydeknce1kM826FCcEI5QoUGNyE=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.67c400bb3774dca5701933cc25958d6cb8b36abf7701b347871bcec7003e7250.js" integrity="sha256-Z8QAuzd03KVwGTPMJZWNbLizar93AbNHhxvOxwA&#43;clA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.74a8bb07f0bee86d6bb9a2750f073f14d93c7e4512f28860370cfd879e9719b4.js" integrity="sha256-dKi7B/C&#43;6G1ruaJ1Dwc/FNk8fkUS8ohgNwz9h56XGbQ=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>I&#39;m not a robot</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="/"><strong>Home</strong></a></li>
+<li><strong>Robotics</strong>
+<ul>
+<li><strong>Workshops</strong>
+<ul>
+<li>
+  <a href="/docs/workshops/workshop_0/"class=active>Getting Started</a></li>
+<li>
+  <a href="/docs/workshops/workshop_1/">Intro to ROS</a></li>
+</ul>
+</li>
+<li>Interesting Papers</li>
+<li>Troubleshooting</li>
+<li>Useful Links</li>
+<li>Data sets</li>
+</ul>
+</li>
+</ul>
+<p><!-- raw HTML omitted --></p>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var menu=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Workshop 0</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview:</a></li>
+    <li><a href="#setting-up-a-linux-install">Setting up a Linux install</a></li>
+    <li><a href="#option-1-virtual-machine">Option 1: Virtual Machine</a></li>
+    <li><a href="#option-2-baremetaldualboot">Option 2: Baremetal/Dualboot</a></li>
+    <li><a href="#using-and-setting-up-your-linux-machine">Using and setting up your Linux machine</a></li>
+    <li><a href="#installing-ros2">Installing ROS2</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="workshop-0-getting-started">Workshop 0: Getting started</h1>
+<h2 id="overview">Overview:</h2>
+<p>This workshop is designed to help you set up a machine with Linux and ROS2 in preparation for the following workshops.</p>
+<p>You will need: 
+To complete the initial workshops, you will really only need a PC and a little bit of space (~40GB should be enough).</p>
+<p>The following sections will help guide you through the set up process for both Linux and ROS2. </p>
+<p>Time to complete: &lt; 1 Hour</p>
+<hr>
+<h2 id="setting-up-a-linux-install">Setting up a Linux install</h2>
+<p>Firstly, we will need to set up our computers so they are robo-ready. Linux is the best (supported) option here, but if you are feeling particularly daring, you might like to try Windows or OSX (warranty void etc). Linux is an open source operating system that functions more or less like Windows/OSX - we&rsquo;ll talk about that more as we progress through the workshops. <br>
+<!-- raw HTML omitted --></p>
+<hr>
+<blockquote class="book-hint info">
+  <p><strong>ELI5</strong>: Operating Systems, Linux and Open Source
+An operating system (OS) is a type of software that runs on your computer that manages your hardware and software, acting as a resource manager while your computer is running. It provides (ideally) an interface that makes the user &lt;-&gt; computer interaction easier, as well as allowing the user to run applications on the machine in a convenient way. When you run Google chrome on your computer, it is actually an application that is running on your operating system, which is running on your computer hardware.</p>
+<p>
+  <img src="/assets/ws_0/os_0.png#center" alt="os_0" /></p>
+<p>Windows, OSX and Linux are all examples of operating systems - they just work slightly differently and offer different capabilities and experiences. OSX is elegant and easy to use, Linux is open source and extremely flexible and Windows does its best.
+Linux is particularly useful for programming and other technical work, since it (through the community) provides a robust set of tools to work with that make computing tasks a little more straightforward and dare I say, enjoyable?</p>
+<p>&ldquo;Open source&rdquo; is a term describes software (and sometimes hardware) that is available for anyone to access and read. For example, if you wanted to, you could look at the code that is used to create the video player VLC here: <a href="https://github.com/videolan/vlc">https://github.com/videolan/vlc</a> - the source is literally open to be inspected. However, you cannot (easily) look at the equivalent code for the OSX or Windows built in media players - we call this &ldquo;closed source&rdquo;.   Typically open source projects are open for community contribution, but sometimes companies make their code open source too.</p>
+
+</blockquote>
+
+<hr>
+<!-- raw HTML omitted -->
+<p>For compatibility reasons, we will want to use Ubuntu 20.04, available here: 
+  <a href="https://releases.ubuntu.com/20.04/">Ubuntu 20.04</a>. However, I would recommend using <strong>
+  <a href="https://xubuntu.org/download/">Xubuntu 20.04</a></strong> instead, as it is a little lighter weight and less graphically intensive than the default Ubuntu. Download the ISO file:</p>
+<p>
+  <img src="/assets/ws_0/xubuntu_iso_file.png#center" alt="xubuntu_iso_file" /></p>
+<p>(Don&rsquo;t worry if you have an Intel CPU and not AMD, AMD64 refers to the target CPU architecure of the iso - any AMD64 arch CPU is fine)</p>
+<p>Ok, so while that is downloading, you might like to consider how you are going to set up your Linux machine. We have a few options here, but the easiest are going to be running a virtual machine on your current OS, or installing Linux on a machine directly (possibly alongside Windows - I wouldn&rsquo;t recommend this on a Mac).</p>
+<p>Update: There is also the Windows Subsystem for Linux, however, I haven&rsquo;t used it that much so I can&rsquo;t comment on how well that works. Installing a Linux virtual machine would be my recommendation.</p>
+<p>I recommend for people who are trying this out for the first time to try a virtual machine - its non-destructive (ie, you wont accidentally wipe your host OS) and super easy to configure later on.</p>
+<hr>
+<h2 id="option-1-virtual-machine">Option 1: Virtual Machine</h2>
+<p>A virtual machine is a way of providing a visualised instance of a computer on top of another computer, even running a different OS! This can be particularly useful for spinning up quick instances of an OS for testing, or simply for convenience. We can install a virtual machine as an application in Windows, for example, running a Linux instance for development purposes. Lets try that now:</p>
+<p>There are two VMs that I have used in the past that work pretty well:</p>
+<ul>
+<li>
+  <a href="https://www.vmware.com/au/products/workstation-player.html">VMWare Workstation</a></li>
+<li>
+  <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a></li>
+</ul>
+<p>It should be simple enough to install one of these, configure it and use the .iso file we downloaded earlier to install our OS. Give yourself about 40GB of space, although if you want to slim that down, 25-30 would also be ok (maybe?).</p>
+<p>You should be greeted by something like this:
+
+  <img src="/assets/ws_0/vmware_0.png#center" alt="vmware_0" /></p>
+<p>Select your iso file and off you go!</p>
+<p>A note on virtual OS&rsquo;s: when running a virtual OS, your &ldquo;stack&rdquo; will look something like this: 
+
+  <img src="/assets/ws_0/os_stack.png#center" alt="os_stack" /></p>
+<p>The virtual machine is running alongside your other apps on your Host OS (Windows in this case), with Linux running on top of it, and open solitaire on top of that.</p>
+<p>This is obviously super convenient, but we typically compromise on performance when running in this configuration. In the above diagram, you can see that we have added another &ldquo;level&rdquo; of interfaces (Virtual Machine and Linux) that applications need to call through to &ldquo;reach&rdquo; the hardware layer. Previously, when Solitaire running on our host OS wanted to access your machine hardware, it would do so through the Windows interface layer. OpenSolitaire running on linux however, has several additional layers to &ldquo;call&rdquo; through. This additional layer (among other things) can certainly slow virtual machines down quite a bit.</p>
+<hr>
+<h2 id="option-2-baremetaldualboot">Option 2: Baremetal/Dualboot</h2>
+<p>We can also install Linux directly onto our machine, no virtualisation required! This is a little trickier, particularly if you are intending to dualboot with Windows. At this point the IT department probably wants me to advise against doing this on your work machines.</p>
+<p>If you are installing on a blank machine and not intending to dualboot, its easy:</p>
+<ol>
+<li>Download ISO</li>
+<li>Download Rufus - this is a tool that allows the easy creation of bootable USB drives</li>
+<li>Create bootable USB stick. plug it in and restart. Note: you may need to change your BIOS boot order to access the USB stick.</li>
+<li>Follow the Ubuntu/Xubuntu installation prompts.</li>
+<li>Enjoy</li>
+</ol>
+<p>Dualbooting is a little trickier, but basically:</p>
+<ol>
+<li>Create bootlable USB as above</li>
+<li>In your Windows settings, disable fastboot:</li>
+</ol>
+<p>
+  <img src="/assets/ws_0/disable_fast.png#center" alt="disable_fast" /></p>
+<ol start="3">
+<li>In Windows, create a partition of appropriate size:</li>
+</ol>
+<p>
+  <img src="/assets/ws_0/resize_part.png#center" alt="resize_part" /></p>
+<ol start="4">
+<li>Boot into your BIOS and disable Secureboot.</li>
+<li>Boot from your Bootable USB stick</li>
+<li>Install as above, but take care that you select your efi partition for your boot loader. You should see somethng like this:</li>
+</ol>
+<p>
+  <img src="/assets/ws_0/efi.png#center" alt="efi" />
+1 is your bootloader partition, 2 is your Windows partition, 3 is soon to be your Linux partition.( + swap space )</p>
+<p>Make sure you have your boot partition set, a swap space set up and the remaining space set to be the root of your filesystem. There is more detail here, but I don&rsquo;t want to tangent too much. Don&rsquo;t wipe your windows partition and anything else is more or less recoverable.</p>
+<p>Happy to add more detail here if people want&hellip;</p>
+<h2 id="using-and-setting-up-your-linux-machine">Using and setting up your Linux machine</h2>
+<p>Ok, so assuming you got through the last section ok, you should be able to boot into your Linux machine and be greeted with something like this (this is <strong>Xubuntu</strong>):</p>
+<p>
+  <img src="/assets/ws_0/xubuntu.png#center" alt="Xubuntu" /></p>
+<p>Have a look around, lets check the default file structure (as it is fairly different to windows):
+if we double click on the &ldquo;Home&rdquo; folder on the desktop, we should see something like this:</p>
+<p>
+  <img src="/assets/ws_0/desktop_files.png#center" alt="desktop_files" /></p>
+<p>This is your users &ldquo;Home&rdquo; directory. It is kind of like your Users directory in windows, except you will do most of your work out of this directory (your home may have some additional folders, like Pictures, Music etc - they can be safely deleted).</p>
+<p>Taking a step back up to the <strong>root</strong> directory (&quot;/&rdquo; in linux file systems) we see more system folders:</p>
+<p>
+  <img src="/assets/ws_0/root_dir.png#center" alt="root_dir" /></p>
+<p>Its unlikely that you will need to modify anything here (for the time being) but it is interesting seeing how a different operating system handles its directory structure. We can see some pretty interesting folders here though:</p>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bin</td>
+<td>This directory stores executable files (<strong>bin</strong>aries) that are essential for the system to run.</td>
+</tr>
+<tr>
+<td>boot</td>
+<td>This directory stores all the necessary files and data for booting the system, including the bootloader (most likely GRUB if you are running Xubuntu and stored in /boot/grub) and parts of (if not all) of the kernel (depending on your distribution).</td>
+</tr>
+<tr>
+<td>dev</td>
+<td>The Linux file system is very different from the windows file system in that everything is treated as a file, including devices (such as serial devices, partitions etc).</td>
+</tr>
+<tr>
+<td>home</td>
+<td>The location of your user directory, usually /home/<!-- raw HTML omitted -->/</td>
+</tr>
+<tr>
+<td>lib*</td>
+<td>Various library folders</td>
+</tr>
+<tr>
+<td>&hellip; and so on</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>There are a bunch of directories there, but we will come back to them later. Lets keep moving!</p>
+<!-- raw HTML omitted -->
+<hr>
+<p>Ok, back on track. So lets take a look at the <strong>pinnacle of interfaces</strong>, the command line. Navigate whichever menu you have and open up a terminal.</p>
+<p>
+  <img src="/assets/ws_0/open_term.png#center" alt="open_term" /></p>
+<p>You should see something like this: 
+
+  <img src="/assets/ws_0/term.png#center" alt="term" /></p>
+<p>Time for some <em>hacker shit</em>. Lets try a few commands:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ls</td>
+<td>list contents of current directory (or directory if specified)</td>
+<td>ls lah</td>
+</tr>
+<tr>
+<td>cd</td>
+<td>change directory (if called with no args, will send you to home)</td>
+<td>cd /etc</td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>shows the present working directory</td>
+<td>pwd</td>
+</tr>
+<tr>
+<td>lsusb</td>
+<td>show currently connected USB devices and their IDs</td>
+<td>lsusb -v</td>
+</tr>
+<tr>
+<td>vim</td>
+<td>a handy dandy text editor in the terminal.</td>
+<td>vim newfile.txt</td>
+</tr>
+</tbody>
+</table>
+<p>Ok Neo, once you have played around with the terminal for a bit, we are now ready to set up our system.</p>
+<p>Lets update our apt package lists - in your terminal type the following:</p>
+<pre><code>sudo apt update 
+</code></pre>
+<p>Command breakdown: 
+<strong>sudo</strong>: this tells the OS that you wish to execute the following instructions as &ldquo;admin&rdquo;. it is short for &ldquo;super-user-do&rdquo; (pronounce soo-dough)
+<strong>apt</strong>: (short for aptitude) &hellip; a package managing program.. oh god, I need to explain that too
+<strong>update</strong>: argument to apt that instructs it to update its packages.</p>
+<hr>
+<blockquote class="book-hint info">
+  <p><strong>ELI5</strong>: Packages? what?</p>
+<p>Ok, so another core difference between Windows and Linux is that the various Linux (distributions - &ldquo;distros&rdquo;, such as ubuntu, Debian, Arch etc) maintain a set of packages that are available as part of their &ldquo;Package Manager&rdquo; system. Anyone who has used python&rsquo;s pip before will be familiar with this, but basically a package is a set of libraries or programs that do a certain thing.</p>
+<p>In Windows, if you want to install a program, you usually google the name of the program and try and find the appropriate installer (like python, for example). You get the .exe, run it, install the program into who knows where in your directory structure, and then when you want to run it, you go and find the exe and double click it.</p>
+<p>Linux distros (like Ubuntu) tend to be a bit more organised. As I mentioned, you have these package lists that are maintained officially, and when you want to download something, like  python, you simple ask the package manager to get the package and install it (like pip..ish):</p>
+<pre><code>sudo apt install gcc
+</code></pre>
+<p>The caveat here is that if you have older package lists, you might download something that is out of date. Also, not everything is stored in the &ldquo;official packages&rdquo;. Finally, while the system does attempt to make sure things are compatible, you can definitely force the system to do the wrong thing.  (Uncommon through normal use, typically the package manager will warn you that something is wrong).</p>
+<p>Once the package is installed, the relevant files will be placed in a sane location on your system. That&rsquo;s right, unlike Windows where you have things install where ever they please, Linux tends to try and keep all your binaries, libraries etc in the same place (typically the root directory, /bin, /sbin, /opt etc depending on what type of package you have installed).</p>
+<p>More on this later&hellip;</p>
+
+</blockquote>
+
+<hr>
+<p>Ok, lets run:</p>
+<pre><code>sudo apt update
+</code></pre>
+<p>and you should see something like this:</p>
+<p>
+  <img src="/assets/ws_0/apt_update.png#center" alt="apt_update" /></p>
+<p>You can see that we have updated our package lists and that there are several that we can update&hellip; lets go ahead and upgrade them:</p>
+<pre><code>sudo apt upgrade
+</code></pre>
+<p>
+  <img src="/assets/ws_0/apt_upgrade.png#center" alt="apt_upgrade" /></p>
+<p>Type &ldquo;Y&rdquo;, hit enter and let it do its thing. Depending on how many packages are able to be updated, this could take a minute or two, but you should see feedback on the</p>
+<p>Finally, before we install ROS2, lets install some other nice to have packages and programs:</p>
+<p>Lets install some other packages that we will need (we can install other things at this point, but for example):</p>
+<pre><code>sudo apt install git vim suckless-tools
+</code></pre>
+<p>Suckless-tools is neat. Once it is installed, go to your keyboard settings in the control panel:</p>
+<p>
+  <img src="/assets/ws_0/keyboard.png#center" alt="keyboard" />
+Click Add:</p>
+<p>
+  <img src="/assets/ws_0/add.png#center" alt="add" /></p>
+<p>Add <strong>dmenu_run</strong> as the command:</p>
+<p>
+  <img src="/assets/ws_0/dmenu_run.png#center" alt="dmenu_run" /></p>
+<p>and press <strong>alt + p</strong> when prompted to enter a keyboard command, you should see this:</p>
+<p>
+  <img src="/assets/ws_0/alt_p.png#center" alt="alt_p" /></p>
+<p>Now if you press Alt + P, you should see at the top of your screen: 
+
+  <img src="/assets/ws_0/dmenu.png#center" alt="dmenu" /></p>
+<p>If you type some letters, you should be able to see application names popping up. Basically this just lets you run programs really quickly and easily without needing to even touch your mouse!</p>
+<p>Lets also install MS Code so you can see how that works. Open your mouse menu and click web browser (by default Firefox)
+Google for MS code and you should get here: 
+
+  <img src="/assets/ws_0/ms_code.png#center" alt="ms_code" /></p>
+<p>Click that and select &ldquo;Save File&rdquo;:
+
+  <img src="/assets/ws_0/save_as.png#center" alt="save_as" /></p>
+<p>It will be placed in your Downloads folder, <strong>cd</strong> there and <strong>ls</strong> the contents of your directory: 
+
+  <img src="/assets/ws_0/ls_downloads.png#center" alt="downloads" /></p>
+<p>Now lets install it from the command line (try using tab-complete for this - type <strong>&ldquo;cod&rdquo;</strong> and hit tab, the shell should autocomplete the name for you):</p>
+<pre><code>sudo dpkg -i code_1.59.1-1629375198_amd64.deb
+</code></pre>
+<p>This is a <strong>.deb</strong> (debian) file, which is a type of package file for Debian based Linux distros. Ok, theres a lot going on in that sentence, but basically it is a file that contains package information and data (like we talked about before).</p>
+<p>In this line, we are instructing <strong>dpkg</strong> (a package management system for ubuntu, works alongside apt) to install (-i) the file we have specified:</p>
+<p>
+  <img src="/assets/ws_0/dpkg_i.png#center" alt="dpkg" /></p>
+<p>Ok, so now if you press <strong>Alt + P</strong> and type <strong>code</strong>, you should see code pop up in the dmenu bar. Hit enter and Code should start up.</p>
+<p>Ok, so that is about it for linux stuff for now. Feel free to play around with the system, try out other command line things and get a feel for it. Next we install ROS2.</p>
+<hr>
+<h2 id="installing-ros2">Installing ROS2</h2>
+<p>Ok, so now we will install ROS2 onto our machines. If you want to skip all my waffling, you can follow the very excellent instructions here:</p>
+<p>
+  <a href="https://docs.ros.org/en/galactic/Installation/Ubuntu-Install-Debians.html">ROS2 Installation</a></p>
+<p>Otherwise, in your terminal, run the following commands:</p>
+<pre><code>locale  # check for UTF-8
+
+sudo apt update &amp;&amp; sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+locale  # verify settings
+</code></pre>
+<p>This updates our locale, which is basically just the environment variables that tell the system which character set, language etc to use.</p>
+<pre><code>sudo apt update 
+sudo apt install curl gnupg lsb-release
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
+</code></pre>
+<p>We have already seen the update (and executed it, so we don&rsquo;t really need to run it again here, but it doesn&rsquo;t hurt). The next line installs a few useful packages, and the last line uses a program called curl to update our distro package list keys.</p>
+<p>Next we add the package repository to our lists and off we go:</p>
+<pre><code>echo &quot;deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main&quot; | sudo tee /etc/apt/sources.list.d/ros2.list &gt; /dev/null
+</code></pre>
+<p>Then:</p>
+<pre><code>sudo apt update
+sudo apt install ros-galactic-desktop
+</code></pre>
+<p>And wait for that to finish. Once it is done, you should be able to test your install!</p>
+<p>Firstly, lets make our lives a little easier:</p>
+<p>There is a file called setup.bash, that allows us to set a bunch of environment variables that we will want to set to be able to use ROS2. We need to set that in each terminal that we run, however, we can add it to the environment set up so that it is automatically set each time we open a new terminal.</p>
+<p>Copy the line: 
+source /opt/ros/galactic/setup.bash</p>
+<p>And add it to the end of your .bashrc file, in your home directory:</p>
+<p>/home/$username/.bashrc</p>
+<p>
+  <img src="/assets/ws_0/bashrc.png#center" alt="bashrc" /></p>
+<p>and now, open two new terminals. (or run the source command on the above file from existing terminals).</p>
+<p>In one, run:</p>
+<pre><code>ros2 run demo_nodes_cpp talker
+</code></pre>
+<p>and the other run:</p>
+<pre><code>ros2 run demo_nodes_py listener
+</code></pre>
+<p>You should see the following (Note the publisher on the left and the subscriber on the right):</p>
+<p>
+  <img src="/assets/ws_0/pub_sub_example.png#center" alt="pub_sub" /></p>
+<p>Congratulations, we have installed ROS2 on a new Linux machine!</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function select(element){const selection=window.getSelection();const range=document.createRange();range.selectNodeContents(element);selection.removeAllRanges();selection.addRange(range);}
+document.querySelectorAll("pre code").forEach(code=>{code.addEventListener("click",function(event){select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText(code.parentElement.textContent);}});});})();</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview:</a></li>
+    <li><a href="#setting-up-a-linux-install">Setting up a Linux install</a></li>
+    <li><a href="#option-1-virtual-machine">Option 1: Virtual Machine</a></li>
+    <li><a href="#option-2-baremetaldualboot">Option 2: Baremetal/Dualboot</a></li>
+    <li><a href="#using-and-setting-up-your-linux-machine">Using and setting up your Linux machine</a></li>
+    <li><a href="#installing-ros2">Installing ROS2</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
